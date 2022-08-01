@@ -1,5 +1,54 @@
 from tkinter import *
 
+#variable 'start' if the user doesn't input data
+start = True
+lastcommand = '='
+result = 0
+
+#create function event handling
+def click(text):
+    global start
+    global lastcommand
+    global display
+    #if text is digital
+    if text.isdigit() or text == '.':
+        if start:
+            display.configure(text='')
+            start = False
+        #if 'text' not dot
+        if text != '.' or display.cget('text').find('.') == -1:
+            display.configure(text=(display.cget('text') + text))
+    else:
+        #check click on the button with symbols(not number)
+        if start:
+            lastcommand = text
+        else:
+            calculate(float(display.cget('text')))
+            lastcommand = text
+            start = True
+            
+#create the function for calculating
+def calculate(x):
+    global lastcommand
+    global result
+    global display
+    if lastcommand == '+':
+        #result= result + x
+        result += x
+    elif lastcommand == '-':
+        result -= x
+    elif lastcommand == '*':
+        result *= x
+    elif lastcommand == '/':
+        #if devide on '0'
+        try:
+            result /= x
+        except ZeroDivisionError:
+            pass
+    elif lastcommand == '=':
+        result = x
+    display.configure(text=result)
+    
 #create the object
 root = Tk()
 root.title("Calculator")
